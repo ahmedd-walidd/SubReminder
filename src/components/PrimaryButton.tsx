@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
 
 type ButtonVariant = "primary" | "secondary" | "danger";
@@ -15,11 +17,30 @@ export function PrimaryButton({
   loading = false,
   variant = "primary",
 }: PrimaryButtonProps) {
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+
+  const getBackgroundColor = (variant: ButtonVariant) => {
+    switch (variant) {
+      case "danger":
+        return colors.danger;
+      case "secondary":
+        return colors.surfaceHighlight;
+      default:
+        return colors.primary;
+    }
+  };
+
+  const getTextColor = (variant: ButtonVariant) => {
+    if (variant === "secondary") return colors.text;
+    return "#FFFFFF";
+  };
+
   return (
     <Pressable
       style={({ pressed }) => [
         styles.base,
-        styles[variant],
+        { backgroundColor: getBackgroundColor(variant) },
         pressed && styles.pressed,
         loading && styles.loading,
       ]}
@@ -28,10 +49,10 @@ export function PrimaryButton({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === "secondary" ? "#111827" : "#FFFFFF"}
+          color={variant === "secondary" ? colors.text : "#FFFFFF"}
         />
       ) : (
-        <Text style={[styles.text, variant === "secondary" && styles.textDark]}>
+        <Text style={[styles.text, { color: getTextColor(variant) }]}>
           {title}
         </Text>
       )}
@@ -41,32 +62,26 @@ export function PrimaryButton({
 
 const styles = StyleSheet.create({
   base: {
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 8,
-  },
-  primary: {
-    backgroundColor: "#2563EB",
-  },
-  secondary: {
-    backgroundColor: "#E5E7EB",
-  },
-  danger: {
-    backgroundColor: "#DC2626",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   text: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "600",
-    color: "#FFFFFF",
-  },
-  textDark: {
-    color: "#111827",
+    letterSpacing: -0.2,
   },
   pressed: {
     opacity: 0.85,
+    transform: [{ scale: 0.98 }],
   },
   loading: {
     opacity: 0.7,

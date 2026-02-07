@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useMemo, useState } from "react";
 import {
     FlatList,
@@ -27,6 +29,8 @@ export function SelectField({
   onValueChange,
 }: SelectFieldProps) {
   const [open, setOpen] = useState(false);
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
 
   const selectedLabel = useMemo(() => {
     return options.find((option) => option.value === value)?.label ?? value;
@@ -34,9 +38,20 @@ export function SelectField({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Pressable style={styles.input} onPress={() => setOpen(true)}>
-        <Text style={styles.value}>{selectedLabel}</Text>
+      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
+      <Pressable
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+        onPress={() => setOpen(true)}
+      >
+        <Text style={[styles.value, { color: colors.text }]}>
+          {selectedLabel}
+        </Text>
       </Pressable>
 
       <Modal
@@ -50,8 +65,10 @@ export function SelectField({
             style={StyleSheet.absoluteFill}
             onPress={() => setOpen(false)}
           />
-          <View style={styles.sheet}>
-            <Text style={styles.sheetTitle}>{label}</Text>
+          <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sheetTitle, { color: colors.text }]}>
+              {label}
+            </Text>
             <FlatList
               data={options}
               keyExtractor={(item) => item.value}
@@ -59,14 +76,27 @@ export function SelectField({
                 <Pressable
                   style={[
                     styles.option,
-                    item.value === value && styles.optionSelected,
+                    item.value === value && {
+                      backgroundColor: colors.surfaceHighlight,
+                    },
+                    { borderBottomColor: colors.border },
                   ]}
                   onPress={() => {
                     onValueChange(item.value);
                     setOpen(false);
                   }}
                 >
-                  <Text style={styles.optionText}>{item.label}</Text>
+                  <Text
+                    style={[
+                      styles.optionText,
+                      {
+                        color:
+                          item.value === value ? colors.primary : colors.text,
+                      },
+                    ]}
+                  >
+                    {item.label}
+                  </Text>
                 </Pressable>
               )}
             />
@@ -79,56 +109,49 @@ export function SelectField({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
     marginBottom: 8,
+    marginLeft: 4,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
   },
   value: {
-    fontSize: 15,
-    color: "#111827",
+    fontSize: 16,
   },
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
-    backgroundColor: "rgba(17, 24, 39, 0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   sheet: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 32,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 40,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     maxHeight: "60%",
   },
   sheetTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#111827",
-    marginBottom: 12,
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 16,
+    textAlign: "center",
   },
   option: {
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
-  },
-  optionSelected: {
-    backgroundColor: "#F3F4F6",
+    paddingHorizontal: 8,
   },
   optionText: {
-    fontSize: 15,
-    color: "#111827",
+    fontSize: 16,
+    fontWeight: "500",
   },
 });

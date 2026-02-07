@@ -1,21 +1,32 @@
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { SelectField } from "@/components/SelectField";
 import { TextInputField } from "@/components/TextInputField";
+import { useDefaultCurrency } from "@/hooks/use-default-currency";
 import { createSubscription } from "@/services/subscriptions";
-
-const currencies = ["USD", "EUR", "GBP", "CAD", "AUD"];
 
 export default function AddSubscriptionScreen() {
   const router = useRouter();
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+  const { defaultCurrency } = useDefaultCurrency();
   const [name, setName] = useState("");
   const [cost, setCost] = useState("");
-  const [currency, setCurrency] = useState("USD");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
     "monthly",
   );
@@ -47,7 +58,7 @@ export default function AddSubscriptionScreen() {
     const result = await createSubscription({
       name: name.trim(),
       cost: parsedCost,
-      currency,
+      currency: defaultCurrency,
       billing_cycle: billingCycle,
       renewal_date: renewalDate,
       reminder_days_before: parsedReminder,
@@ -63,7 +74,19 @@ export default function AddSubscriptionScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={styles.title}>Add subscription</Text>
+      <View style={styles.headerRow}>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Add subscription
+        </Text>
+        <Pressable
+          style={styles.closeButton}
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel="Close"
+        >
+          <MaterialIcons name="close" size={22} color={colors.text} />
+        </Pressable>
+      </View>
 
       <TextInputField
         label="Name"
@@ -80,13 +103,6 @@ export default function AddSubscriptionScreen() {
       />
 
       <SelectField
-        label="Currency"
-        value={currency}
-        options={currencies.map((item) => ({ label: item, value: item }))}
-        onValueChange={setCurrency}
-      />
-
-      <SelectField
         label="Billing cycle"
         value={billingCycle}
         options={[
@@ -99,7 +115,7 @@ export default function AddSubscriptionScreen() {
       />
 
       <View style={styles.fieldBlock}>
-        <Text style={styles.label}>Renewal date</Text>
+        <Text style={[styles.label, { color: colors.text }]}>Renewal date</Text>
         <PrimaryButton
           title={renewalDate.toDateString()}
           onPress={() => setShowDatePicker(true)}
@@ -134,19 +150,31 @@ export default function AddSubscriptionScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
   title: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 16,
+    fontSize: 28,
+    fontWeight: "800",
+    letterSpacing: -1,
+  },
+  closeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
   },
   fieldBlock: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#374151",
     marginBottom: 8,
+    marginLeft: 4,
   },
 });

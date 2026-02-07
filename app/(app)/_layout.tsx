@@ -17,7 +17,32 @@ export default function AppLayout() {
     <Stack
       screenOptions={{
         headerTitleAlign: "center",
+        headerShadowVisible: false,
+        headerBackTitleVisible: false,
       }}
-    />
+    >
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="add"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen
+        name="edit/[id]"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          gestureEnabled: true,
+        }}
+      />
+    </Stack>
   );
 }

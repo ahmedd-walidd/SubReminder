@@ -1,53 +1,60 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Modern color palette for SubTrack
  */
+import { Platform } from "react-native";
 
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primary = "#6366F1"; // Indigo 500
+const primaryDark = "#4F46E5"; // Indigo 600
+const secondary = "#EC4899"; // Pink 500
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    primary: primary,
+    primaryDark: primaryDark,
+    secondary: secondary,
+    background: "#F9FAFB", // Gray 50
+    surface: "#FFFFFF",
+    surfaceHighlight: "#F3F4F6", // Gray 100
+    text: "#111827", // Gray 900
+    textMuted: "#6B7280", // Gray 500
+    textLight: "#9CA3AF", // Gray 400
+    border: "#E5E7EB", // Gray 200
+    danger: "#EF4444", // Red 500
+    success: "#10B981", // Emerald 500
+    warning: "#F59E0B", // Amber 500
+    tint: primary,
+    tabIconDefault: "#9CA3AF",
+    tabIconSelected: primary,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    primary: "#818CF8", // Indigo 400
+    primaryDark: "#6366F1", // Indigo 500
+    secondary: "#F472B6", // Pink 400
+    background: "#111827", // Gray 900
+    surface: "#1F2937", // Gray 800
+    surfaceHighlight: "#374151", // Gray 700
+    text: "#F9FAFB", // Gray 50
+    textMuted: "#D1D5DB", // Gray 300
+    textLight: "#9CA3AF", // Gray 400
+    border: "#374151", // Gray 700
+    danger: "#F87171", // Red 400
+    success: "#34D399", // Emerald 400
+    warning: "#FBBF24", // Amber 400
+    tint: "#818CF8",
+    tabIconDefault: "#6B7280",
+    tabIconSelected: "#818CF8",
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    sans: "System",
+    serif: "Georgia",
+    mono: "Menlo",
   },
   default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    sans: "sans-serif",
+    serif: "serif",
+    mono: "monospace",
   },
 });

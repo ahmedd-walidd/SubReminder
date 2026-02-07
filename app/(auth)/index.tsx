@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 
@@ -10,6 +12,8 @@ const emailRegex = /\S+@\S+\.\S+/;
 
 export default function AuthScreen() {
   const { signIn, signUp } = useAuth();
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,8 +62,8 @@ export default function AuthScreen() {
   return (
     <ScreenContainer>
       <View style={styles.header}>
-        <Text style={styles.title}>SubTrack</Text>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.title, { color: colors.primary }]}>SubTrack</Text>
+        <Text style={[styles.subtitle, { color: colors.textMuted }]}>
           {mode === "login" ? "Welcome back" : "Create your account"}
         </Text>
       </View>
@@ -86,12 +90,12 @@ export default function AuthScreen() {
         loading={loading}
       />
 
-      <Text style={styles.toggleText}>
+      <Text style={[styles.toggleText, { color: colors.textMuted }]}>
         {mode === "login"
           ? "Don't have an account?"
           : "Already have an account?"}
         <Text
-          style={styles.toggleLink}
+          style={[styles.toggleLink, { color: colors.primary }]}
           onPress={() => setMode(mode === "login" ? "signup" : "login")}
         >
           {" "}
@@ -104,25 +108,26 @@ export default function AuthScreen() {
 
 const styles = StyleSheet.create({
   header: {
-    marginBottom: 32,
+    marginBottom: 40,
+    marginTop: 40,
+    alignItems: "center",
   },
   title: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 8,
+    fontSize: 42,
+    fontWeight: "900",
+    marginBottom: 12,
+    letterSpacing: -1.5,
   },
   subtitle: {
     fontSize: 16,
-    color: "#6B7280",
+    fontWeight: "500",
   },
   toggleText: {
+    marginTop: 24,
     textAlign: "center",
-    marginTop: 16,
-    color: "#6B7280",
+    fontSize: 15,
   },
   toggleLink: {
-    color: "#2563EB",
-    fontWeight: "600",
+    fontWeight: "700",
   },
 });
